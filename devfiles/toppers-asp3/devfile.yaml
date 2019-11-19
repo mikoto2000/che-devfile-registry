@@ -1,0 +1,59 @@
+---
+apiVersion: 1.0.0
+metadata:
+  generateName: toppers-asp3-
+projects:
+  - name: toppers-asp3
+    source:
+      location: 'https://github.com/mikoto2000/toppers-asp3.git'
+      type: git
+components:
+  - id: che-incubator/cpptools/0.1
+    preferences:
+      clangd.path: /usr/bin/clangd
+      cdt.clangd.binaries.enable: false
+    type: chePlugin
+    alias: cpp-plugin
+  - mountSources: true
+    command:
+      - sleep
+    args:
+      - infinity
+    memoryLimit: 512Mi
+    type: dockerimage
+    alias: cpp-dev
+    image: quay.io/eclipse/che-cpp-rhel7:7.4.0
+  - type: dockerimage
+    alias: toppers-kernel-build-kit
+    image: mikoto2000/che-toppers-kernel-build-kit:dev
+    memoryLimit: 512Mi
+    mountSources: true
+  - type: dockerimage
+    alias: qemu-xilinx
+    image: mikoto2000/che-qemu-xilinx:latest
+    memoryLimit: 512Mi
+    mountSources: true
+  - type: dockerimage
+    alias: gdb-multiarch
+    image: mikoto2000/che-gdb-multiarch:8.2.1-2b3
+    memoryLimit: 512Mi
+commands:
+  - name: create sample
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}'
+        type: exec
+        command: "mkdir sample; cd sample; ruby ../toppers-asp3/configure.rb -T zybo_z7_gcc"
+        component: toppers-kernel-build-kit
+  - name: build sample
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/sample'
+        type: exec
+        command: make
+        component: toppers-kernel-build-kit
+  - name: run sample on qemu
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/sample'
+        type: exec
+        command: qemu-system-aarch64 -M arm-generic-fdt-7series -dtb /var/dts/zynq-zybo.dtb -serial null -serial mon:stdio -nographic -kernel ./asp
+        component: qemu-xilinx
+
