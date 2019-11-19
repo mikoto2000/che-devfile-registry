@@ -1,0 +1,7 @@
+---
+displayName: TOPPERS ASP3
+description: TOPPERS ASP3
+tags: ["TOPPERS", "ASP3", "Qemu", "Xilinx", "Arm"]
+icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
+globalMemoryLimit: 2674Mi
+
