@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2018-2019 Red Hat, Inc.
+# Copyright (c) 2018-2020 Red Hat, Inc.
 # This program and the accompanying materials are made
 # available under the terms of the Eclipse Public License 2.0
 # which is available at https://www.eclipse.org/legal/epl-2.0/
@@ -12,7 +12,7 @@
 
 # Builder: check meta.yamls and create index.json
 # https://access.redhat.com/containers/?tab=tags#/registry.access.redhat.com/ubi8-minimal
-FROM registry.access.redhat.com/ubi8-minimal:8.0-213 as builder
+FROM registry.access.redhat.com/ubi8-minimal:8.1-409 as builder
 USER 0
 
 ################# 
@@ -21,8 +21,8 @@ USER 0
 
 ARG BOOTSTRAP=false
 ENV BOOTSTRAP=${BOOTSTRAP}
-ARG LATEST_ONLY=false
-ENV LATEST_ONLY=${LATEST_ONLY}
+ARG USE_DIGESTS=false
+ENV USE_DIGESTS=${USE_DIGESTS}
 
 # to get all the python deps pre-fetched so we can build in Brew:
 # 1. extract files in the container to your local filesystem
@@ -39,8 +39,8 @@ ENV LATEST_ONLY=${LATEST_ONLY}
 
 # NOTE: uncomment for local build. Must also set full registry path in FROM to registry.redhat.io or registry.access.redhat.com
 # enable rhel 7 or 8 content sets (from Brew) to resolve jq as rpm
-COPY ./build/dockerfiles/content_sets_epel7.repo /etc/yum.repos.d/
-
+COPY ./build/dockerfiles/content_set*.repo /etc/yum.repos.d/
+COPY ./build/dockerfiles/fedora.repo /etc/yum.repos.d/
 COPY ./build/dockerfiles/rhel.install.sh /tmp
 RUN /tmp/rhel.install.sh && rm -f /tmp/rhel.install.sh
 
@@ -58,6 +58,7 @@ RUN TAG=${PATCHED_IMAGES_TAG} \
     REGISTRY=${PATCHED_IMAGES_REG} \
     ./update_devfile_patched_image_tags.sh
 RUN ./check_mandatory_fields.sh devfiles
+RUN if [[ ${USE_DIGESTS} == "true" ]]; then ./write_image_digests.sh devfiles; fi
 RUN ./index.sh > /build/devfiles/index.json
 RUN ./list_referenced_images.sh devfiles > /build/devfiles/external_images.txt
 RUN chmod -R g+rwX /build/devfiles
@@ -69,12 +70,14 @@ RUN chmod -R g+rwX /build/devfiles
 # Build registry, copying meta.yamls and index.json from builder
 # UPSTREAM: use RHEL7/RHSCL/httpd image so we're not required to authenticate with registry.redhat.io
 # https://access.redhat.com/containers/?tab=tags#/registry.access.redhat.com/rhscl/httpd-24-rhel7
-FROM registry.access.redhat.com/rhscl/httpd-24-rhel7:2.4-105 AS registry
+FROM registry.access.redhat.com/rhscl/httpd-24-rhel7:2.4-110 AS registry
 
 # DOWNSTREAM: use RHEL8/httpd
 # https://access.redhat.com/containers/?tab=tags#/registry.access.redhat.com/rhel8/httpd-24
-# FROM registry.redhat.io/rhel8/httpd-24:1-60 AS registry
+# FROM registry.redhat.io/rhel8/httpd-24:1-89 AS registry
 USER 0
+RUN yum update -y systemd && yum clean all && rm -rf /var/cache/yum && \
+    echo "Installed Packages" && rpm -qa | sort -V && echo "End Of Installed Packages"
 
 # BEGIN these steps might not be required
 RUN sed -i /etc/httpd/conf/httpd.conf \
@@ -88,9 +91,10 @@ STOPSIGNAL SIGWINCH
 
 WORKDIR /var/www/html
 
-RUN mkdir /var/www/html/devfiles
+RUN mkdir -m 777 /var/www/html/devfiles
 COPY .htaccess README.md /var/www/html/
 COPY --from=builder /build/devfiles /var/www/html/devfiles
+COPY ./images /var/www/html/images
 COPY ./build/dockerfiles/rhel.entrypoint.sh ./build/dockerfiles/entrypoint.sh /usr/local/bin/
 RUN chmod g+rwX /usr/local/bin/entrypoint.sh /usr/local/bin/rhel.entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

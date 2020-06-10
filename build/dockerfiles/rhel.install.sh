@@ -1,17 +1,20 @@
 #!/bin/bash
 #
-# Copyright (c) 2012-2018 Red Hat, Inc.
+# Copyright (c) 2018-2020 Red Hat, Inc.
 # This program and the accompanying materials are made
 # available under the terms of the Eclipse Public License 2.0
 # which is available at https://www.eclipse.org/legal/epl-2.0/
 #
 # SPDX-License-Identifier: EPL-2.0
 #
-
-microdnf install -y findutils bash wget yum gzip git tar jq python3-six python3-pip && microdnf -y clean all && \
+microdnf --disablerepo=fedora30-updates --disablerepo=fedora30-secondary-updates install -y findutils bash wget yum gzip tar python3-six python3-pip && microdnf -y clean all && \
+microdnf --enablerepo=fedora30-updates --enablerepo=fedora30-secondary-updates install -y skopeo jq && microdnf update -y skopeo containers-common jq oniguruma && microdnf -y clean all; \
 # install yq (depends on jq and pyyaml - if jq and pyyaml not already installed, this will try to compile it)
 if [[ -f /tmp/root-local.tgz ]] || [[ ${BOOTSTRAP} == "true" ]]; then \
-    mkdir -p /root/.local; tar xf /tmp/root-local.tgz -C /root/.local/; rm -fr /tmp/root-local.tgz;  \
+    mkdir -p /root/.local; \
+	if [[ -f /tmp/root-local.tgz ]]; then \
+		tar xf /tmp/root-local.tgz -C /root/.local/; rm -fr /tmp/root-local.tgz; \
+	fi; \
     /usr/bin/pip3.6 install --user yq jsonschema; \
     # could be installed in /opt/app-root/src/.local/bin or /root/.local/bin
     for d in /opt/app-root/src/.local /root/.local; do \
