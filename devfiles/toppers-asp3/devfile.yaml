@@ -8,7 +8,7 @@ projects:
       location: 'https://github.com/mikoto2000/toppers-asp3.git'
       type: git
 components:
-  - id: mikoto2000/vscode-cpptools/0.26.1
+  - id: mikoto2000/vscode-cpptools/0.28.3
     type: chePlugin
     alias: vscode-cpptools
   - type: dockerimage
