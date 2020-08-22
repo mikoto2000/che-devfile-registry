@@ -1,0 +1,19 @@
+---
+apiVersion: 1.0.0
+metadata:
+  generateName: ruby-
+projects:
+  - name: ruby-helloworld
+    source:
+      location: 'https://github.com/mikoto2000/ruby-helloworld.git'
+      type: git
+components:
+  - id: mikoto2000/vscode-solargraph/0.21.1
+    type: chePlugin
+    alias: vscode-solargraph
+  - type: dockerimage
+    alias: ruby
+    image: mikoto2000/che-ruby:latest
+    memoryLimit: 512Mi
+    mountSources: true
+
