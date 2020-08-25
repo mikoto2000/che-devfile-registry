@@ -1,0 +1,7 @@
+---
+displayName: TOPPERS ASP3 in Zig
+description: TOPPERS ASP3 in Zig
+tags: ["TOPPERS", "ASP3", "Qemu", "Arm"]
+icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
+globalMemoryLimit: 2674Mi
+
