@@ -1,0 +1,7 @@
+---
+displayName: TOPPERS HRP3
+description: TOPPERS HRP3
+tags: ["TOPPERS", "HRP3", "Qemu", "Xilinx", "Arm"]
+icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
+globalMemoryLimit: 2674Mi
+
