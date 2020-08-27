@@ -1,0 +1,7 @@
+---
+displayName: TOPPERS FMP3 ZCU102
+description: TOPPERS FMP3 ZCU102
+tags: ["TOPPERS", "FMP3", "Qemu", "Xilinx", "Aarch64"]
+icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
+globalMemoryLimit: 2674Mi
+
