@@ -1,0 +1,7 @@
+---
+displayName: TOPPERS FMP3 ZYBO Z7
+description: TOPPERS FMP3 ZYBO Z7
+tags: ["TOPPERS", "FMP3", "Qemu", "Xilinx", "Arm"]
+icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
+globalMemoryLimit: 2674Mi
+
