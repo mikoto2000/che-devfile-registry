@@ -1,7 +1,7 @@
 ---
 apiVersion: 1.0.0
 metadata:
-  generateName: toppers-hrmp3
+  generateName: toppers-hrmp3-
 projects:
   - name: toppers-hrmp3
     source:
