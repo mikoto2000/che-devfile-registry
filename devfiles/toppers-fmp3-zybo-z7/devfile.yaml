@@ -14,7 +14,7 @@ components:
     alias: vscode-cpptools
   - type: dockerimage
     alias: toppers-kernel-build-kit
-    image: mikoto2000/che-toppers-kernel-build-kit:dev
+    image: mikoto2000/che-toppers-kernel-build-kit:che-zig-with-gcc-arm-none-eabi-latest
     memoryLimit: 512Mi
     mountSources: true
   - type: dockerimage
