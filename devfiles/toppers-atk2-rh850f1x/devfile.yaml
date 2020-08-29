@@ -1,7 +1,7 @@
 ---
 apiVersion: 1.0.0
 metadata:
-  name: toppers-atk2-rh850f1x-
+  generateName: toppers-atk2-rh850f1x-
 projects:
   - name: toppers-atk2-rh850f1x
     source:

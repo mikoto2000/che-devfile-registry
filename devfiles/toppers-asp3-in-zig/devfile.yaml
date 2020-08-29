@@ -1,7 +1,7 @@
 ---
 apiVersion: 1.0.0
 metadata:
-  name: asp3-in-zig-
+  generateName: asp3-in-zig-
 projects:
   - name: asp3-in-zig
     source:

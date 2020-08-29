@@ -1,6 +1,6 @@
 ---
-displayName: TOPPERS ATK2 RH850f1x
-description: TOPPERS ATK2 RH850f1x
+displayName: TOPPERS ATK2 SC1 RH850f1x
+description: TOPPERS ATK2 SC1 RH850f1x
 tags: ["TOPPERS", "ATK2", "Athrill", "RH850"]
 icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
 globalMemoryLimit: 2674Mi
