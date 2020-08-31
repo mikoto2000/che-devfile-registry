@@ -25,6 +25,7 @@ components:
     alias: gdb-multiarch
     image: mikoto2000/che-gdb-multiarch:8.2.1-2b3
     memoryLimit: 512Mi
+    mountSources: true
 commands:
   - name: create sample
     actions:

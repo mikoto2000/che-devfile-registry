@@ -8,6 +8,9 @@ projects:
       location: 'https://github.com/toppers/asp3_in_zig.git'
       type: git
 components:
+  - id: mikoto2000/vscode-cpptools/0.28.3
+    type: chePlugin
+    alias: vscode-cpptools
   - mountSources: true
     memoryLimit: 512Mi
     type: dockerimage
@@ -19,6 +22,11 @@ components:
     type: dockerimage
     image: 'mikoto2000/che-qemu-system-arm:latest'
     alias: qemu-system-arm
+  - type: dockerimage
+    alias: gdb-multiarch
+    image: mikoto2000/che-gdb-multiarch:8.2.1-2b3
+    memoryLimit: 512Mi
+    mountSources: true
 commands:
   - name: create sample
     actions:

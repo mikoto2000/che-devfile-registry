@@ -8,6 +8,9 @@ projects:
       location: 'https://github.com/mikoto2000/toppers-atk2-sc1-mc.git'
       type: git
 components:
+  - id: mikoto2000/vscode-cpptools/0.28.3
+    type: chePlugin
+    alias: vscode-cpptools
   - mountSources: true
     memoryLimit: 512Mi
     type: dockerimage
@@ -17,6 +20,11 @@ components:
   - type: dockerimage
     alias: qemu-xilinx
     image: mikoto2000/che-qemu-xilinx:latest
+    memoryLimit: 512Mi
+    mountSources: true
+  - type: dockerimage
+    alias: gdb-multiarch
+    image: mikoto2000/che-gdb-multiarch:8.2.1-2b3
     memoryLimit: 512Mi
     mountSources: true
 commands:
